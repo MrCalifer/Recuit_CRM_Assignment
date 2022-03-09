@@ -20,7 +20,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import edu.califer.recuit_crmassignment.HelperClass
+import edu.califer.recuit_crmassignment.Utils.HelperClass
 import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.ViewModels.AuthViewModel
 import edu.califer.recuit_crmassignment.activity.MainActivity

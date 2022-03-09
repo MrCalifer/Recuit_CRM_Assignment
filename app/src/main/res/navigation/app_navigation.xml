@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="edu.califer.recuit_crmassignment.SplashFragment"
+        android:name="edu.califer.recuit_crmassignment.Fragments.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/fragment_splash">
         <action
@@ -45,10 +45,23 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="edu.califer.recuit_crmassignment.HomeFragment"
+        android:name="edu.califer.recuit_crmassignment.Fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
 
+        <action
+            android:id="@+id/action_homeFragment_to_addCompaniesFragment"
+            app:destination="@id/addCompaniesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/close_exit"
+            app:popEnterAnim="@anim/closed_enter"
+            app:popExitAnim="@anim/close_exit"
+            app:popUpTo="@id/homeFragment"/>
     </fragment>
+    <fragment
+        android:id="@+id/addCompaniesFragment"
+        android:name="edu.califer.recuit_crmassignment.Fragments.AddCompaniesFragment"
+        android:label="AddCompaniesFragment"
+        tools:layout="@layout/fragment_add_companies"/>
 
 </navigation>

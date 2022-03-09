@@ -8,4 +8,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hi">Hi..</string>
     <string name="get_started">Lets get started with your account</string>
+    <string name="add_button">Add Button</string>
+    <string name="no_companies_added_yet_n_add_companies_to_view">No companies added yet. \n\n Add Companies to view.</string>
 </resources>

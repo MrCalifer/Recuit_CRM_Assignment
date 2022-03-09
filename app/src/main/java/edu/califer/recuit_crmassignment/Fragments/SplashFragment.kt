@@ -1,4 +1,4 @@
-package edu.califer.recuit_crmassignment
+package edu.califer.recuit_crmassignment.Fragments
 
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import edu.califer.recuit_crmassignment.Utils.HelperClass
+import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.databinding.FragmentSplashBinding
 
