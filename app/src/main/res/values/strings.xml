@@ -2,4 +2,6 @@
     <string name="app_name">Recuit-CRM Assignment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hi">Hi..</string>
+    <string name="get_started">Lets get started with your account</string>
 </resources>

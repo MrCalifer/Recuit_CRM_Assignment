@@ -59,7 +59,7 @@ class SplashFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(Runnable {
             findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
-        }, 5000) //5 seconds
+        }, 3000)
     }
 
     /**

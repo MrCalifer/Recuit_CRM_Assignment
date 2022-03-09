@@ -1,56 +1,120 @@
 package edu.califer.recuit_crmassignment.Authentication
 
+import android.app.Activity
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.os.Looper
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import edu.califer.recuit_crmassignment.MainActivity
 import edu.califer.recuit_crmassignment.R
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import edu.califer.recuit_crmassignment.ViewModels.AuthViewModel
+import edu.califer.recuit_crmassignment.databinding.FragmentSignInBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignInFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignInFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    lateinit var binding: FragmentSignInBinding
+    lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        authViewModel = activity.run {
+            ViewModelProvider(this@SignInFragment)[AuthViewModel::class.java]
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_in, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_in, container, false)
+        binding.lifecycleOwner = this
+
+        (activity as MainActivity).viewModel.statusBarIconColor(0, requireActivity())
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignInFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic fun newInstance(param1: String, param2: String) =
-                SignInFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+    override fun onResume() {
+        super.onResume()
+
+        binding.nextButton.setOnClickListener {
+            if (binding.nextButton.text == "Next"){
+                //Hide soft input keyboard
+                val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+
+                if (validateEmail()){
+                    if (binding.password.editText?.text != null && binding.password.editText!!.text.isNotBlank()){
+                        if (authViewModel.verifyCredentials(email = binding.username.editText!!.text.toString().trim() ,
+                            password = binding.password.editText!!.text.toString().trim())){
+                            //TODO send user to main screen
+                        }else{
+                            //TODO if email is not registered then send user to sign-up
+                        }
+                    }else{
+                        binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                        binding.password.error = "Password cannot be empty!!"
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.password.error = null
+                        },2000)
                     }
                 }
+            }else{
+                validateEmail()
+            }
+        }
     }
+
+    /**
+     * Function to validate the email.
+     */
+    private fun validateEmail() : Boolean{
+        val isValid: Boolean
+        if (binding.username.editText!!.text.toString().isNotEmpty()
+                && Patterns.EMAIL_ADDRESS.matcher(binding.username.editText?.text.toString())
+            .matches()
+        ) {
+            binding.username.error = null
+            if (authViewModel.isEmailRegistered(
+                    email = binding.username.editText!!.text.toString().trim()
+                )
+            ) {
+                isValid = true
+                binding.password.visibility = View.VISIBLE
+                binding.nextButton.text = "Next"
+            } else {
+                isValid = false
+
+                //TODO Show Dialog and send user to Sign Up Page
+                authViewModel.email.value = binding.username.editText!!.text.toString().trim()
+            }
+        } else {
+            binding.password.editText!!.text.clear()
+            binding.password.visibility = View.GONE
+            binding.username.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.username.error = "Invalid Email Address!!"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.username.error = null
+            },2000)
+            binding.nextButton.text = "Continue"
+            isValid = false
+        }
+        return isValid
+    }
+
 }

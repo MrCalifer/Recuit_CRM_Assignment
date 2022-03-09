@@ -14,9 +14,9 @@
             android:id="@+id/action_splashFragment_to_signInFragment"
             app:destination="@id/signInFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/close_exit"
             app:popEnterAnim="@anim/closed_enter"
-            app:popExitAnim="@anim/closed_enter"
+            app:popExitAnim="@anim/close_exit"
             app:popUpTo="@id/app_navigation"/>
     </fragment>
 

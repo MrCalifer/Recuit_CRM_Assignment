@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
 
 class BaseViewModel : ViewModel() {
@@ -32,5 +33,4 @@ class BaseViewModel : ViewModel() {
             }
         }
     }
-
 }
