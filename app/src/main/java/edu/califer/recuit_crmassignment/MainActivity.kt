@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

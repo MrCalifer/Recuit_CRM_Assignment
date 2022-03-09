@@ -1,4 +1,4 @@
-package edu.califer.recuit_crmassignment
+package edu.califer.recuit_crmassignment.ViewModels
 
 import android.app.Activity
 import android.graphics.Color

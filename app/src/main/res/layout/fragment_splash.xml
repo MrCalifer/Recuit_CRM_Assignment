@@ -8,19 +8,18 @@
         android:layout_height="match_parent"
         tools:context=".SplashFragment">
 
-        <TextView
-            android:background="@color/black"
-            android:layout_width="0dp"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/splashAnimation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:padding="20dp"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:lottie_rawRes="@raw/splash" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

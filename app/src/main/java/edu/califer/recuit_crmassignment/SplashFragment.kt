@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.databinding.FragmentSplashBinding
 
 class SplashFragment : Fragment() {
@@ -43,6 +45,18 @@ class SplashFragment : Fragment() {
         super.onResume()
 
         /**Setting the Status Bar Icon Color.*/
-        viewModel.statusBarIconColor(0, requireActivity())
+        viewModel.statusBarIconColor(1, requireActivity())
+
+        setAnimation()
+    }
+
+    /**
+    * Function to set animation for the splash screen
+    */
+    private fun setAnimation(){
+        val splashVideoAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        splashVideoAnimation.reset()
+        binding.splashAnimation.clearAnimation()
+        binding.splashAnimation.startAnimation(splashVideoAnimation)
     }
 }
