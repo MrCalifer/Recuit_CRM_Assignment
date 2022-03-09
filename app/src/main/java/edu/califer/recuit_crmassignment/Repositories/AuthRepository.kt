@@ -2,16 +2,15 @@ package edu.califer.recuit_crmassignment.Repositories
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import edu.califer.recuit_crmassignment.database.DatabaseBuilder
 import edu.califer.recuit_crmassignment.database.entities.AuthEntity
 import edu.califer.recuit_crmassignment.database.entities.DatabaseHelperImpl
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AuthRepository(application: Application) {
 
+    private val TAG = "AuthRepository"
     private val dbHelper: DatabaseHelperImpl =
         DatabaseHelperImpl(DatabaseBuilder.getInstance(application))
 
@@ -32,5 +31,12 @@ class AuthRepository(application: Application) {
             }
         }
         return authEntity
+    }
+
+    /**
+     * Function to verify if the email is already registered in the database.
+     */
+    suspend fun verifyEmail(email: String): AuthEntity? {
+        return dbHelper.verifyEmail(email)
     }
 }
