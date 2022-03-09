@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs'
 }
 
 kapt {
@@ -82,4 +83,8 @@ dependencies {
     def fragment_version = "1.4.1"
     // Kotlin
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    def nav_version = "2.4.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 }
