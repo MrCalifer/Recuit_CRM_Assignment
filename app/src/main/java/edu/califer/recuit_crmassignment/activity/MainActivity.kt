@@ -1,10 +1,10 @@
-package edu.califer.recuit_crmassignment
+package edu.califer.recuit_crmassignment.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.databinding.ActivityMainBinding
 
