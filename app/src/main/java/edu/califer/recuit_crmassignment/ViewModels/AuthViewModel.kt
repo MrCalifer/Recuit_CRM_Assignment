@@ -60,25 +60,25 @@ open class AuthViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Function to verify the login credential of the user
      */
-    fun verifyCredentials(email: String, password: String){
+    fun verifyCredentials(email: String, password: String) {
         viewModelScope.launch {
             val result = kotlin.runCatching {
                 authRepository.verifyEmail(email)
             }
 
             result.onSuccess {
-                if (it != null){
-                    if(it.password == password
-                    ){
+                if (it != null) {
+                    if (it.password == password
+                    ) {
                         isCredentialVerified.value = CREDENTIAL_VERIFICATION_SUCCESS
-                    }else{
+                    } else {
                         isCredentialVerified.value = CREDENTIAL_VERIFICATION_FAILED
                     }
                 }
             }
 
             result.onFailure {
-                Log.e(TAG , "Failed due to ${it.message}")
+                Log.e(TAG, "Failed due to ${it.message}")
             }
         }
     }

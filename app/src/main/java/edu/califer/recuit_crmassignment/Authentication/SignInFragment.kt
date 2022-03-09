@@ -1,5 +1,6 @@
 package edu.califer.recuit_crmassignment.Authentication
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Patterns
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +17,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.ViewModels.AuthViewModel
@@ -40,7 +42,7 @@ class SignInFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_in, container, false)
@@ -51,37 +53,40 @@ class SignInFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
 
         authViewModel.getAllUser()
 
-        authViewModel.isEmailRegistered.observe(viewLifecycleOwner, Observer {
+        authViewModel.isEmailRegistered.observe(viewLifecycleOwner) {
             if (it != null && it == AuthViewModel.EMAIL_IS_REGISTERED) {
                 binding.password.visibility = View.VISIBLE
                 binding.nextButton.text = "Next"
             } else if (it != null && it == AuthViewModel.EMAIL_IS_NOT_REGISTERED) {
                 hideKeyboard()
-                //TODO Send User to Sign-Up Screen
                 setUpDialog(AuthViewModel.EMAIL_IS_NOT_REGISTERED)
             }
-        })
+        }
 
-        authViewModel.isRegistrationCompleted.observe(viewLifecycleOwner, Observer {
+        authViewModel.isRegistrationCompleted.observe(viewLifecycleOwner) {
             if (it) {
                 setUpDialog(AuthViewModel.REGISTRATION_COMPLETED)
                 binding.nextButton.isEnabled = true
                 binding.username.isEnabled = true
                 binding.password.editText!!.setText("")
                 binding.password.isEnabled = true
+                binding.confirmPassword.isEnabled = true
+                binding.confirmPassword.editText!!.setText("")
 
                 authViewModel.isRegistrationCompleted.value = false
             }
-        })
+        }
 
-        authViewModel.isCredentialVerified.observe(viewLifecycleOwner, Observer {
+        authViewModel.isCredentialVerified.observe(viewLifecycleOwner) {
             if (it == AuthViewModel.CREDENTIAL_VERIFICATION_SUCCESS) {
                 //TODO SEND USER TO MAIN SCREEN
+                Toast.makeText(requireContext() , "Logged In" , Toast.LENGTH_LONG).show()
             } else if (it == AuthViewModel.CREDENTIAL_VERIFICATION_FAILED) {
                 binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
                 binding.password.error = "Password Incorrect!"
@@ -89,7 +94,7 @@ class SignInFragment : Fragment() {
                     binding.password.error = null
                 }, 2000)
             }
-        })
+        }
 
         binding.Login.setOnClickListener {
             binding.gettingStarted.text = "Lets get started with your account."
@@ -199,6 +204,7 @@ class SignInFragment : Fragment() {
     /**
      * Function to validate the email.
      */
+    @SuppressLint("SetTextI18n")
     private fun validateEmail(): Boolean {
         var isValid: Boolean
 
@@ -233,6 +239,7 @@ class SignInFragment : Fragment() {
     /**
      * Function to setup dialog.
      */
+    @SuppressLint("SetTextI18n")
     private fun setUpDialog(isUserRegistered: Int) {
         val dialog = Dialog(binding.root.context)
         dialog.setContentView(R.layout.registration_dialog)
