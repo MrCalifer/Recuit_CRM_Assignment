@@ -1,12 +1,12 @@
 package edu.califer.recuit_crmassignment.Adapter
 
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import de.hdodenhof.circleimageview.CircleImageView
 
 /**Setting up the Circular ImageView.*/
 @BindingAdapter("setCircularImageView", requireAll = true)
-fun setCircularImageView(view: CircleImageView?, url: String?) {
+fun setCircularImageView(view: ImageView?, url: String?) {
     if (view != null) {
         Glide
             .with(view.context)

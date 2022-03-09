@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import edu.califer.recuit_crmassignment.activity.MainActivity
 import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.ViewModels.AuthViewModel
+import edu.califer.recuit_crmassignment.database.entities.AuthEntity
 import edu.califer.recuit_crmassignment.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
@@ -113,5 +115,8 @@ class SignInFragment : Fragment() {
         }
         return isValid
     }
+
+
+
 
 }
