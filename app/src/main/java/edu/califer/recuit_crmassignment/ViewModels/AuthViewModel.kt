@@ -18,11 +18,14 @@ open class AuthViewModel(application: Application) : AndroidViewModel(applicatio
         const val EMAIL_IS_NOT_REGISTERED = 2
         const val INVALID_CREDENTIAL = 3
         const val REGISTRATION_COMPLETED = 4
+        const val CREDENTIAL_VERIFICATION_FAILED = 5
+        const val CREDENTIAL_VERIFICATION_SUCCESS = 6
     }
 
     var isEmailRegistered: MutableLiveData<Int> = MutableLiveData(0)
 
     var isRegistrationCompleted: MutableLiveData<Boolean> = MutableLiveData(false)
+    var isCredentialVerified: MutableLiveData<Int> = MutableLiveData(0)
 
     private var authRepository: AuthRepository = AuthRepository(application)
 
@@ -57,16 +60,54 @@ open class AuthViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Function to verify the login credential of the user
      */
-    fun verifyCredentials(email: String, password: String): Boolean {
-        return true
+    fun verifyCredentials(email: String, password: String){
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                authRepository.verifyEmail(email)
+            }
+
+            result.onSuccess {
+                if (it != null){
+                    if(it.password == password
+                    ){
+                        isCredentialVerified.value = CREDENTIAL_VERIFICATION_SUCCESS
+                    }else{
+                        isCredentialVerified.value = CREDENTIAL_VERIFICATION_FAILED
+                    }
+                }
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Failed due to ${it.message}")
+            }
+        }
     }
 
     /**
      * Function to register new user.
      */
     fun registerUser(email: String, password: String) {
-        val authEntity = AuthEntity(email, password)
+        val authEntity = AuthEntity(id = 0, email = email, password = password)
         insertDataInDB(authEntity = authEntity)
+    }
+
+    /**
+     * Function to get all users
+     */
+    fun getAllUser() {
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                authRepository.getAllUser()
+            }
+
+            result.onSuccess {
+                Log.d(TAG, "$it")
+            }
+
+            result.onFailure {
+                Log.d("DB", "Failed ${it.message}")
+            }
+        }
     }
 
 
@@ -80,7 +121,7 @@ open class AuthViewModel(application: Application) : AndroidViewModel(applicatio
             }
 
             result.onSuccess {
-                Log.d("DB", "Auth Inserted in DB $it")
+                Log.d("DB", "Auth Inserted in DB")
                 isRegistrationCompleted.value = true
             }
 

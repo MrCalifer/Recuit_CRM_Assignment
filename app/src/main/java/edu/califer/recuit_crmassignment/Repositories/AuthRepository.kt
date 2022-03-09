@@ -39,4 +39,8 @@ class AuthRepository(application: Application) {
     suspend fun verifyEmail(email: String): AuthEntity? {
         return dbHelper.verifyEmail(email)
     }
+
+    suspend fun getAllUser(): List<AuthEntity> {
+        return dbHelper.getAllUser()
+    }
 }

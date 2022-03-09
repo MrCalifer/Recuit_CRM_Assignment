@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -55,6 +54,8 @@ class SignInFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        authViewModel.getAllUser()
+
         authViewModel.isEmailRegistered.observe(viewLifecycleOwner, Observer {
             if (it != null && it == AuthViewModel.EMAIL_IS_REGISTERED) {
                 binding.password.visibility = View.VISIBLE
@@ -66,11 +67,27 @@ class SignInFragment : Fragment() {
             }
         })
 
-        authViewModel.isRegistrationCompleted.observe(viewLifecycleOwner , Observer {
-            if (it){
+        authViewModel.isRegistrationCompleted.observe(viewLifecycleOwner, Observer {
+            if (it) {
                 setUpDialog(AuthViewModel.REGISTRATION_COMPLETED)
                 binding.nextButton.isEnabled = true
                 binding.username.isEnabled = true
+                binding.password.editText!!.setText("")
+                binding.password.isEnabled = true
+
+                authViewModel.isRegistrationCompleted.value = false
+            }
+        })
+
+        authViewModel.isCredentialVerified.observe(viewLifecycleOwner, Observer {
+            if (it == AuthViewModel.CREDENTIAL_VERIFICATION_SUCCESS) {
+                //TODO SEND USER TO MAIN SCREEN
+            } else if (it == AuthViewModel.CREDENTIAL_VERIFICATION_FAILED) {
+                binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                binding.password.error = "Password Incorrect!"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.password.error = null
+                }, 2000)
             }
         })
 
@@ -87,7 +104,6 @@ class SignInFragment : Fragment() {
             binding.loginText.visibility = View.GONE
         }
 
-
         binding.nextButton.setOnClickListener {
             if (binding.nextButton.text == "Next") {
 
@@ -95,15 +111,11 @@ class SignInFragment : Fragment() {
 
                 if (validateEmail()) {
                     if (binding.password.editText?.text != null && binding.password.editText!!.text.isNotBlank()) {
-                        if (authViewModel.verifyCredentials(
-                                email = binding.username.editText!!.text.toString().trim(),
-                                password = binding.password.editText!!.text.toString().trim()
-                            )
-                        ) {
-                            //TODO send user to main screen
-                        } else {
-                            setUpDialog(AuthViewModel.INVALID_CREDENTIAL)
-                        }
+                        authViewModel.verifyCredentials(
+                            email = binding.username.editText!!.text.toString().trim(),
+                            password = binding.password.editText!!.text.toString().trim()
+                        )
+
                     } else {
                         binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
                         binding.password.error = "Password cannot be empty!!"
@@ -235,6 +247,7 @@ class SignInFragment : Fragment() {
                 message.text = "User Not Registered.\n Kindly Register."
                 continueButton.text = "Register"
                 continueButton.visibility = View.VISIBLE
+                binding.password.visibility = View.GONE
                 dialog.show()
                 dialog.setCanceledOnTouchOutside(false)
             }

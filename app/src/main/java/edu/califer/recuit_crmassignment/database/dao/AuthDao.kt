@@ -17,7 +17,7 @@ interface AuthDao {
     @Query("DELETE FROM auth_table")
     suspend fun nukeAuthTable()
 
-    @Query("SELECT * FROM auth_table WHERE email = :email")
+    @Query("SELECT * FROM auth_table WHERE email LIKE :email")
     suspend fun getAuthByEmail(email: String): AuthEntity?
 
     @Query("SELECT * FROM auth_table")

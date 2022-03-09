@@ -7,4 +7,6 @@ interface DatabaseHelper {
     suspend fun insertAuth(authEntity: AuthEntity)
     suspend fun verifyEmail(email: String): AuthEntity?
 
+    suspend fun getAllUser():List<AuthEntity>
+
 }

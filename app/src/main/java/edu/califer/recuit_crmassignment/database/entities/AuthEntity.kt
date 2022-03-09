@@ -7,6 +7,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "auth_table")
 data class AuthEntity(
 
-    @PrimaryKey var email: String = "",
-    @ColumnInfo(name = "password") var password: String= ""
+    @PrimaryKey(autoGenerate = true)
+    var id : Int,
+
+    @ColumnInfo(name = "email")
+    var email :String = "" ,
+
+    @ColumnInfo(name = "password")
+    var password: String= ""
 )
