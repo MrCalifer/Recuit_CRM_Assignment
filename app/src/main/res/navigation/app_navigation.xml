@@ -18,11 +18,37 @@
             app:popEnterAnim="@anim/closed_enter"
             app:popExitAnim="@anim/close_exit"
             app:popUpTo="@id/app_navigation"/>
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/close_exit"
+            app:popEnterAnim="@anim/closed_enter"
+            app:popExitAnim="@anim/close_exit"
+            app:popUpTo="@id/app_navigation"/>
     </fragment>
 
     <fragment
         android:id="@+id/signInFragment"
         android:name="edu.califer.recuit_crmassignment.Authentication.SignInFragment"
         android:label="SignInFragment"
-        tools:layout="@layout/fragment_sign_in"/>
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_signInFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/close_exit"
+            app:popEnterAnim="@anim/closed_enter"
+            app:popExitAnim="@anim/close_exit"
+            app:popUpTo="@id/app_navigation"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="edu.califer.recuit_crmassignment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
 </navigation>

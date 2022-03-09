@@ -101,7 +101,7 @@ open class AuthViewModel(application: Application) : AndroidViewModel(applicatio
             }
 
             result.onSuccess {
-                Log.d(TAG, "$it")
+                Log.d(TAG, "${it.size}")
             }
 
             result.onFailure {

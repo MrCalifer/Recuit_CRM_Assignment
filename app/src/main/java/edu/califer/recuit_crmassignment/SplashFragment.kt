@@ -9,11 +9,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import edu.califer.recuit_crmassignment.Authentication.SignInFragment
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.databinding.FragmentSplashBinding
 
@@ -45,6 +42,8 @@ class SplashFragment : Fragment() {
         /**Setting a lifecycleOwner as this Fragment.*/
         binding.lifecycleOwner = this
 
+        HelperClass.loginSharedPreference(requireContext())
+
         return binding.root
     }
 
@@ -57,8 +56,12 @@ class SplashFragment : Fragment() {
         setAnimation()
 
         val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed(Runnable {
-            findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
+        handler.postDelayed({
+            if (HelperClass.getUserLoggedIn(requireContext())) {
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+            } else {
+                findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
+            }
         }, 3000)
     }
 
@@ -71,15 +74,4 @@ class SplashFragment : Fragment() {
         binding.splashAnimation.clearAnimation()
         binding.splashAnimation.startAnimation(splashVideoAnimation)
     }
-
-//    /**
-//     * Function to send user to sign-In Screen
-//     */
-//    private fun sendToSignIn() {
-//        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-//        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.fragment_container, SignInFragment())
-//        fragmentTransaction.addToBackStack(null)
-//        fragmentTransaction.commit()
-//    }
 }

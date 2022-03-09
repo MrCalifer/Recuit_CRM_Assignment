@@ -1,11 +1,13 @@
 package edu.califer.recuit_crmassignment.ViewModels
 
 import android.app.Activity
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
+
 
 class BaseViewModel : ViewModel() {
 

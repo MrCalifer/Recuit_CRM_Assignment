@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Patterns
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import edu.califer.recuit_crmassignment.HelperClass
 import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.ViewModels.AuthViewModel
 import edu.califer.recuit_crmassignment.activity.MainActivity
@@ -85,8 +85,12 @@ class SignInFragment : Fragment() {
 
         authViewModel.isCredentialVerified.observe(viewLifecycleOwner) {
             if (it == AuthViewModel.CREDENTIAL_VERIFICATION_SUCCESS) {
-                //TODO SEND USER TO MAIN SCREEN
-                Toast.makeText(requireContext() , "Logged In" , Toast.LENGTH_LONG).show()
+                requireActivity().runOnUiThread {
+                    if (findNavController().currentDestination?.id == R.id.signInFragment) {
+                        HelperClass.setUserLoggedIn(requireContext(), true)
+                        findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                    }
+                }
             } else if (it == AuthViewModel.CREDENTIAL_VERIFICATION_FAILED) {
                 binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
                 binding.password.error = "Password Incorrect!"
@@ -145,7 +149,7 @@ class SignInFragment : Fragment() {
                             )
                         } else {
                             binding.confirmPassword.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-                            binding.confirmPassword.error = "Invalid Email Address!!"
+                            binding.confirmPassword.error = "Password cannot be empty!!"
                             Handler(Looper.getMainLooper()).postDelayed({
                                 binding.confirmPassword.error = null
                             }, 2000)
