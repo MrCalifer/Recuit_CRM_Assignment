@@ -36,29 +36,21 @@ class CompanyRepository(application: Application) {
     /**
      * Function to fetch all companies list and return it.
      */
-    suspend fun getCompaniesList() : List<CompanyEntity>{
+    suspend fun getCompaniesList(): List<CompanyEntity> {
         return dbHelper.getAllCompany()
     }
 
-
     /**
      * Function to delete the existing company in DB
      */
-    suspend fun deleteCompany(website: String){
-        dbHelper.deleteCompany(website)
-    }
-
-    /**
-     * Function to delete the existing company in DB
-     */
-    suspend fun deleteCompany(companyEntity: CompanyEntity){
+    suspend fun deleteCompany(companyEntity: CompanyEntity) {
         dbHelper.deleteCompany(companyEntity = companyEntity)
     }
 
     /**
      * Function to update the existing company in DB
      */
-    suspend fun updateCompany(companyEntity: CompanyEntity){
+    suspend fun updateCompany(companyEntity: CompanyEntity) {
         dbHelper.updateCompany(companyEntity = companyEntity)
     }
 

@@ -95,7 +95,5 @@ class CompanyAdapter(var companyList: List<CompanyEntity>, var companyListener: 
         fun onItemDelete(company: Company): Company {
             return company
         }
-
     }
-
 }

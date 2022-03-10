@@ -129,7 +129,7 @@ class HomeFragment : Fragment() {
                                 country = company.country,
                                 type = company.type
                             )
-                            viewModel.deleteCompInDB(
+                            viewModel.deleteCompanyInDB(
                                 CompanyEntity(
                                     id = company.id,
                                     companyName = company.name,
@@ -142,8 +142,6 @@ class HomeFragment : Fragment() {
                                     companyType = company.type
                                 )
                             )
-//                            viewModel.deleteCompanyInDB(viewModel.company.value!!.website)
-
                             return super.onItemDelete(company)
                         }
                     })

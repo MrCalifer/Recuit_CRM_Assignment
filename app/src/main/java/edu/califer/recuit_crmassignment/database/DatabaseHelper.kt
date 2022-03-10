@@ -7,11 +7,10 @@ interface DatabaseHelper {
 
     suspend fun insertAuth(authEntity: AuthEntity)
     suspend fun verifyEmail(email: String): AuthEntity?
-    suspend fun getAllUser():List<AuthEntity>
+    suspend fun getAllUser(): List<AuthEntity>
 
     suspend fun insertCompany(companyEntity: CompanyEntity)
-    suspend fun getAllCompany():List<CompanyEntity>
-    suspend fun deleteCompany(website: String)
+    suspend fun getAllCompany(): List<CompanyEntity>
     suspend fun deleteCompany(companyEntity: CompanyEntity)
     suspend fun updateCompany(companyEntity: CompanyEntity)
 }

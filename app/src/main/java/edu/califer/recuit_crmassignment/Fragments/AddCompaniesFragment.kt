@@ -1,5 +1,6 @@
 package edu.califer.recuit_crmassignment.Fragments
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -53,6 +54,7 @@ class AddCompaniesFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
 
@@ -101,7 +103,7 @@ class AddCompaniesFragment : Fragment() {
 
         binding.addCompany.setOnClickListener {
             if (binding.addCompany.text == "Update") {
-                if (verifyInputs()){
+                if (verifyInputs()) {
                     val company = getCompanyInput()
                     binding.addCompanyProgressBar.visibility = View.VISIBLE
                     binding.outerLayout.isEnabled = false
@@ -119,8 +121,7 @@ class AddCompaniesFragment : Fragment() {
                         )
                     )
                 }
-            }
-            else if (verifyInputs()) {
+            } else if (verifyInputs()) {
                 val company = getCompanyInput()
                 binding.addCompanyProgressBar.visibility = View.VISIBLE
                 binding.outerLayout.isEnabled = false
@@ -144,7 +145,7 @@ class AddCompaniesFragment : Fragment() {
     /**
      * Function to get Company Inputs
      */
-    private fun getCompanyInput() : Company{
+    private fun getCompanyInput(): Company {
         return Company(
             id = viewModel.companyID.value ?: 0,
             name = binding.companyName.editText!!.text.toString().trim(),
