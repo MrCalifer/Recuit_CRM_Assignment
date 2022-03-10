@@ -13,4 +13,6 @@ interface DatabaseHelper {
     suspend fun getAllCompany(): List<CompanyEntity>
     suspend fun deleteCompany(companyEntity: CompanyEntity)
     suspend fun updateCompany(companyEntity: CompanyEntity)
+
+    suspend fun deleteAllCompanyDB()
 }

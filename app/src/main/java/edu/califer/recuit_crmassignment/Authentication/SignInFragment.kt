@@ -165,7 +165,7 @@ class SignInFragment : Fragment() {
                     } else {
                         binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
                         binding.password.error =
-                            "Invalid Password!! . Password must be of 6 Character including one special character."
+                            "Invalid Password!! . Password must be of 6 Character including one special character`."
                         Handler(Looper.getMainLooper()).postDelayed({
                             binding.password.error = null
                         }, 2000)

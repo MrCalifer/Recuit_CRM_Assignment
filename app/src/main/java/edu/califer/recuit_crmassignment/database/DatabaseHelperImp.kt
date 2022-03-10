@@ -28,5 +28,9 @@ class DatabaseHelperImpl(private val companyDB: CompanyDB) : DatabaseHelper {
     override suspend fun updateCompany(companyEntity: CompanyEntity) =
         companyDB.companyDao().updateCompany(companyEntity)
 
+    override suspend fun deleteAllCompanyDB() {
+        companyDB.companyDao().deleteAll()
+    }
+
 
 }

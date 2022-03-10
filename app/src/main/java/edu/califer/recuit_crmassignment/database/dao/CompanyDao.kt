@@ -18,4 +18,7 @@ interface CompanyDao {
     @Update(entity = CompanyEntity::class)
     suspend fun updateCompany(companyEntity: CompanyEntity)
 
+    @Query("DELETE FROM company_table")
+    suspend fun deleteAll()
+
 }

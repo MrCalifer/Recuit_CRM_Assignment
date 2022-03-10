@@ -103,4 +103,23 @@ class CompanyViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    /**
+     * Function to delete companyDB
+     */
+    fun deleteDB(){
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                companyRepository.deleteCompanyDB()
+            }
+
+            result.onSuccess {
+                Log.d(TAG, "CompanyDB deleted.")
+            }
+
+            result.onFailure {
+                Log.e(TAG, "Failed due to ${it.message}")
+            }
+        }
+    }
+
 }

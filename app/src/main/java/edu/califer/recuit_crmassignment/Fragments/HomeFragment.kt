@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
 
         binding.logout.setOnClickListener {
             HelperClass.logout(requireContext())
+            viewModel.deleteDB()
             findNavController().navigate(R.id.action_homeFragment_to_signInFragment)
         }
 
