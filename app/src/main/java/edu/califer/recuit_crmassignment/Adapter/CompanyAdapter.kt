@@ -86,6 +86,34 @@ class CompanyAdapter(var companyList: List<CompanyEntity>, var companyListener: 
         )
     }
 
+    // method for filtering our recyclerview items.
+    fun filterList(filterllist: ArrayList<Company>) {
+        // below line is to add our filtered
+        // list in our course array list.
+
+        val filterList = ArrayList<CompanyEntity>()
+        for (i in 0 until filterllist.size) {
+            filterList.add(
+                CompanyEntity(
+                    id = filterllist[i].id,
+                    companyName = filterllist[i].name,
+                    companyWebsite = filterllist[i].website,
+                    companyPhoneNumber = filterllist[i].number,
+                    companyAddress = filterllist[i].address,
+                    companyCity = filterllist[i].city,
+                    companyState = filterllist[i].state,
+                    companyCountry = filterllist[i].country,
+                    companyType = filterllist[i].type
+                )
+            )
+        }
+
+        companyList = filterList
+        // below line is to notify our adapter
+        // as change in recycler view data.
+        notifyDataSetChanged()
+    }
+
     interface CompanyListener {
 
         fun onItemEdit(company: Company): Company {

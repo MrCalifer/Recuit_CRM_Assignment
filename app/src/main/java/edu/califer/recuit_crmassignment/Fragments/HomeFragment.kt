@@ -4,9 +4,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +27,7 @@ import edu.califer.recuit_crmassignment.ViewModels.CompanyViewModel
 import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import edu.califer.recuit_crmassignment.databinding.FragmentHomeBinding
 import pl.kitek.rvswipetodelete.SwipeToEditCallback
+
 
 class HomeFragment : Fragment() {
 
@@ -100,10 +104,28 @@ class HomeFragment : Fragment() {
         val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
         deleteItemTouchHelper.attachToRecyclerView(binding.companyRecyclerView)
 
+        binding.companySearch.setOnSearchClickListener {
+            binding.companySearch.queryHint = Html.fromHtml("<font color = #00000>" + "Search Company Name" + "</font>")
+        }
+
+        binding.companySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val adapter = binding.companyRecyclerView.adapter as CompanyAdapter
+                filter(newText, adapter)
+                return false
+            }
+        })
+
+
         viewModel.listOfCompanies.observe(viewLifecycleOwner) {
             if (it == null) {
                 viewModel.getCompaniesList()
             } else if (it.isNotEmpty()) {
+                binding.companySearch.visibility = View.VISIBLE
                 if (it.size == 1) {
                     if (!HelperClass.isManualShowed(requireContext())) {
                         val dialog = Dialog(binding.root.context)
@@ -170,9 +192,45 @@ class HomeFragment : Fragment() {
                     })
                 }
             } else if (it.isEmpty()) {
+                binding.companySearch.visibility = View.GONE
                 binding.companyRecyclerView.visibility = View.GONE
                 binding.noElement.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun filter(text: String?, adapter: CompanyAdapter) {
+        val filteredList: ArrayList<Company> = ArrayList()
+
+        val companyList: ArrayList<Company> = ArrayList()
+        for (i in 0 until viewModel.listOfCompanies.value!!.size) {
+            companyList.add(
+                Company(
+                    id = viewModel.listOfCompanies.value!![i].id,
+                    name = viewModel.listOfCompanies.value!![i].companyName,
+                    website = viewModel.listOfCompanies.value!![i].companyWebsite,
+                    number = viewModel.listOfCompanies.value!![i].companyPhoneNumber,
+                    address = viewModel.listOfCompanies.value!![i].companyAddress,
+                    city = viewModel.listOfCompanies.value!![i].companyCity,
+                    state = viewModel.listOfCompanies.value!![i].companyState,
+                    country = viewModel.listOfCompanies.value!![i].companyCountry,
+                    type = viewModel.listOfCompanies.value!![i].companyType
+                )
+            )
+        }
+
+
+        for (item in companyList) {
+            if (text != null) {
+                if (item.name.toLowerCase().contains(text.toLowerCase())) {
+                    filteredList.add(item)
+                }
+            }
+        }
+        if (filteredList.isEmpty()) {
+            Toast.makeText(requireContext(), "No Data Found..", Toast.LENGTH_SHORT).show()
+        } else {
+            adapter.filterList(filteredList)
         }
     }
 }
