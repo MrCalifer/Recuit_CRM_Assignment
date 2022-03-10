@@ -11,5 +11,5 @@ interface DatabaseHelper {
 
     suspend fun insertCompany(companyEntity: CompanyEntity)
     suspend fun getAllCompany():List<CompanyEntity>
-
+    suspend fun deleteCompany(companyEntity: String)
 }

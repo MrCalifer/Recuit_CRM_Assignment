@@ -3,11 +3,9 @@ package edu.califer.recuit_crmassignment.Repositories
 import android.app.Application
 import android.util.Log
 import edu.califer.recuit_crmassignment.database.DatabaseBuilder
-import edu.califer.recuit_crmassignment.database.entities.AuthEntity
 import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import edu.califer.recuit_crmassignment.database.entities.DatabaseHelperImpl
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
 class CompanyRepository(application: Application) {
@@ -40,6 +38,14 @@ class CompanyRepository(application: Application) {
      */
     suspend fun getCompaniesList() : List<CompanyEntity>{
         return dbHelper.getAllCompany()
+    }
+
+
+    /**
+     * Function to delete the existing company in DB
+     */
+    suspend fun deleteCompany(website: String){
+        dbHelper.deleteCompany(website)
     }
 
 }

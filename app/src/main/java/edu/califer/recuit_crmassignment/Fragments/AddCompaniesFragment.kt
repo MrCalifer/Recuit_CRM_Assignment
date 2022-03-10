@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.Utils.Company
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
@@ -35,7 +34,7 @@ class AddCompaniesFragment : Fragment() {
             ViewModelProvider(this@AddCompaniesFragment)[BaseViewModel::class.java]
         }
         viewModel = activity.run {
-            ViewModelProvider(this@AddCompaniesFragment)[CompanyViewModel::class.java]
+            ViewModelProvider(requireActivity())[CompanyViewModel::class.java]
         }
     }
 
@@ -59,17 +58,51 @@ class AddCompaniesFragment : Fragment() {
 
         dropDownAdapter()
 
-        viewModel.companyAdded.observe(viewLifecycleOwner){
-            if (it){
+        viewModel.companyAdded.observe(viewLifecycleOwner) {
+            if (it) {
                 requireActivity().onBackPressed()
                 viewModel.companyAdded.value = false
-            }else{
+            } else {
                 binding.addCompanyProgressBar.visibility = View.GONE
                 binding.outerLayout.isEnabled = true
             }
         }
 
+        viewModel.isEdit.observe(viewLifecycleOwner) {
+            if (it != null && viewModel.company.value != null && it) {
+                binding.companyName.editText?.setText(viewModel.company.value!!.name)
+                binding.companyWebsite.editText?.setText(viewModel.company.value!!.website)
+                binding.companyPhoneNumber.editText?.setText(viewModel.company.value!!.number)
+                binding.companyAddress.editText?.setText(viewModel.company.value!!.address)
+                binding.companyCity.editText?.setText(viewModel.company.value!!.city)
+                binding.companyState.editText?.setText(viewModel.company.value!!.state)
+                binding.companyCountry.editText?.setText(viewModel.company.value!!.country)
+                when (viewModel.company.value!!.type) {
+                    "Account" -> {
+                        binding.industryLists.setSelection(1)
+                    }
+                    "IT" -> {
+                        binding.industryLists.setSelection(2)
+                    }
+                    "Sales" -> {
+                        binding.industryLists.setSelection(3)
+                    }
+                    "Health Care" -> {
+                        binding.industryLists.setSelection(4)
+                    }
+                    else -> {
+                        binding.industryLists.setSelection(0)
+                    }
+                }
+                binding.addCompany.text = "Update"
+                viewModel.isEdit.value = false
+            }
+        }
+
         binding.addCompany.setOnClickListener {
+            if (binding.addCompany.text == "Update") {
+
+            }
             if (verifyInputs()) {
                 val company = Company(
                     name = binding.companyName.editText!!.text.toString().trim(),
@@ -104,10 +137,11 @@ class AddCompaniesFragment : Fragment() {
      * Function to verify each input fields.
      */
     private fun verifyInputs(): Boolean {
-        var isValid = false
+        var isValid: Boolean
         if (binding.companyName.editText?.text.toString().isNotBlank()) {
             isValid = true
         } else {
+            isValid = false
             binding.companyName.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyName.error = "Name cannot be empty!!"
             Handler(Looper.getMainLooper()).postDelayed({
@@ -120,6 +154,7 @@ class AddCompaniesFragment : Fragment() {
         ) {
             isValid = true
         } else {
+            isValid = false
             binding.companyWebsite.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyWebsite.error = "Invalid web address!!"
             Handler(Looper.getMainLooper()).postDelayed({
@@ -131,6 +166,7 @@ class AddCompaniesFragment : Fragment() {
         ) {
             isValid = true
         } else {
+            isValid = false
             binding.companyPhoneNumber.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyPhoneNumber.error = "Invalid Number!. Number should be of 10 digits"
             Handler(Looper.getMainLooper()).postDelayed({
@@ -140,6 +176,7 @@ class AddCompaniesFragment : Fragment() {
         if (binding.companyCity.editText?.text.toString().isNotBlank()) {
             isValid = true
         } else {
+            isValid = false
             binding.companyCity.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyCity.error = "Cannot be empty!!"
             Handler(Looper.getMainLooper()).postDelayed({
@@ -149,6 +186,7 @@ class AddCompaniesFragment : Fragment() {
         if (binding.companyState.editText?.text.toString().isNotBlank()) {
             isValid = true
         } else {
+            isValid = false
             binding.companyState.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyState.error = "Cannot be empty!!"
             Handler(Looper.getMainLooper()).postDelayed({
@@ -158,6 +196,7 @@ class AddCompaniesFragment : Fragment() {
         if (binding.companyCountry.editText?.text.toString().isNotBlank()) {
             isValid = true
         } else {
+            isValid = false
             binding.companyCountry.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyCountry.error = "Cannot be empty!!"
             Handler(Looper.getMainLooper()).postDelayed({
@@ -167,6 +206,7 @@ class AddCompaniesFragment : Fragment() {
         if (binding.industryLists.selectedItem.toString() != "Select your Industry Type") {
             isValid = true
         } else {
+            isValid = false
             Toast.makeText(requireContext(), "Industry Type must be selected", Toast.LENGTH_SHORT)
                 .show()
         }

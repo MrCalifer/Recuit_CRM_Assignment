@@ -12,7 +12,8 @@ interface CompanyDao {
     @Query("SELECT * FROM company_table")
     suspend fun getAllCompanyEntries(): List<CompanyEntity>
 
-    @Delete
-    suspend fun deleteCompany(companyEntity: CompanyEntity)
+    @Query("DELETE FROM company_table WHERE website = :website")
+    suspend fun deleteCompany(website: String)
+
 
 }

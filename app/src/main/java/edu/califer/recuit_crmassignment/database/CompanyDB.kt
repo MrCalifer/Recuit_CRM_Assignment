@@ -9,7 +9,8 @@ import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 
 @Database(
     entities = [AuthEntity::class , CompanyEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class CompanyDB : RoomDatabase() {
     abstract fun authDao(): AuthDao

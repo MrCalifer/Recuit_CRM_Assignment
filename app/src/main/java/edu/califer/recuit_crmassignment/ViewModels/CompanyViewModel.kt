@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import edu.califer.recuit_crmassignment.Repositories.AuthRepository
 import edu.califer.recuit_crmassignment.Repositories.CompanyRepository
+import edu.califer.recuit_crmassignment.Utils.Company
 import edu.califer.recuit_crmassignment.database.entities.AuthEntity
 import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import kotlinx.coroutines.launch
@@ -18,7 +19,11 @@ class CompanyViewModel(application: Application) : AndroidViewModel(application)
 
     var listOfCompanies : MutableLiveData<List<CompanyEntity>> = MutableLiveData()
     var companyAdded : MutableLiveData<Boolean> = MutableLiveData(false)
+    var company : MutableLiveData<Company> = MutableLiveData()
+    var isEdit : MutableLiveData<Boolean> = MutableLiveData(false)
+    var isDelete : MutableLiveData<Boolean> = MutableLiveData(false)
 
+    var isCompanyDeleted : MutableLiveData<Boolean> = MutableLiveData(false)
 
     /**
      * Function to get all the list of companies
@@ -55,6 +60,26 @@ class CompanyViewModel(application: Application) : AndroidViewModel(application)
 
             result.onFailure {
                 Log.d(TAG, "Company Insertion failed ${it.message}")
+            }
+        }
+    }
+
+    /**
+     * Function to delete company in database
+     */
+    fun deleteCompanyInDB(website: String){
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                companyRepository.deleteCompany(website)
+            }
+
+            result.onSuccess {
+                isCompanyDeleted.value = true
+                Log.d(TAG , "Company deleted from DB")
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Failed due to ${it.message}")
             }
         }
     }
