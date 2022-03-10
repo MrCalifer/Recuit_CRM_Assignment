@@ -48,4 +48,18 @@ class CompanyRepository(application: Application) {
         dbHelper.deleteCompany(website)
     }
 
+    /**
+     * Function to delete the existing company in DB
+     */
+    suspend fun deleteCompany(companyEntity: CompanyEntity){
+        dbHelper.deleteCompany(companyEntity = companyEntity)
+    }
+
+    /**
+     * Function to update the existing company in DB
+     */
+    suspend fun updateCompany(companyEntity: CompanyEntity){
+        dbHelper.updateCompany(companyEntity = companyEntity)
+    }
+
 }

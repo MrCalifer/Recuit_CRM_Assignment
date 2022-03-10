@@ -5,10 +5,8 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import edu.califer.recuit_crmassignment.Repositories.AuthRepository
 import edu.califer.recuit_crmassignment.Repositories.CompanyRepository
 import edu.califer.recuit_crmassignment.Utils.Company
-import edu.califer.recuit_crmassignment.database.entities.AuthEntity
 import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import kotlinx.coroutines.launch
 
@@ -22,8 +20,9 @@ class CompanyViewModel(application: Application) : AndroidViewModel(application)
     var company : MutableLiveData<Company> = MutableLiveData()
     var isEdit : MutableLiveData<Boolean> = MutableLiveData(false)
     var isDelete : MutableLiveData<Boolean> = MutableLiveData(false)
+    var companyID : MutableLiveData<Int> = MutableLiveData(0)
 
-    var isCompanyDeleted : MutableLiveData<Boolean> = MutableLiveData(false)
+    var refreshCompanyList : MutableLiveData<Boolean> = MutableLiveData(false)
 
     /**
      * Function to get all the list of companies
@@ -74,7 +73,48 @@ class CompanyViewModel(application: Application) : AndroidViewModel(application)
             }
 
             result.onSuccess {
-                isCompanyDeleted.value = true
+                refreshCompanyList.value = true
+                Log.d(TAG , "Company deleted from DB")
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Failed due to ${it.message}")
+            }
+        }
+    }
+
+    /**
+     * Function to delete company in database
+     */
+    fun deleteCompInDB(companyEntity: CompanyEntity){
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                companyRepository.deleteCompany(companyEntity)
+            }
+
+            result.onSuccess {
+                refreshCompanyList.value = true
+                Log.d(TAG , "Company deleted from DB")
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Failed due to ${it.message}")
+            }
+        }
+    }
+
+    /**
+     * Function to update company in database
+     */
+    fun updateCompanyInDB(companyEntity: CompanyEntity){
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                companyRepository.updateCompany(companyEntity)
+            }
+
+            result.onSuccess {
+                companyAdded.value = true
+                refreshCompanyList.value = true
                 Log.d(TAG , "Company deleted from DB")
             }
 

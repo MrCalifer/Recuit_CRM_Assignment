@@ -101,19 +101,27 @@ class AddCompaniesFragment : Fragment() {
 
         binding.addCompany.setOnClickListener {
             if (binding.addCompany.text == "Update") {
-
+                if (verifyInputs()){
+                    val company = getCompanyInput()
+                    binding.addCompanyProgressBar.visibility = View.VISIBLE
+                    binding.outerLayout.isEnabled = false
+                    viewModel.updateCompanyInDB(
+                        CompanyEntity(
+                            id = viewModel.companyID.value!!,
+                            companyName = company.name,
+                            companyWebsite = company.website,
+                            companyPhoneNumber = company.number,
+                            companyAddress = company.address,
+                            companyCity = company.city,
+                            companyState = company.state,
+                            companyCountry = company.country,
+                            companyType = company.type
+                        )
+                    )
+                }
             }
-            if (verifyInputs()) {
-                val company = Company(
-                    name = binding.companyName.editText!!.text.toString().trim(),
-                    website = binding.companyWebsite.editText!!.text.toString().trim(),
-                    number = binding.companyPhoneNumber.editText!!.text.toString().trim(),
-                    address = binding.companyAddress.editText?.text.toString()?.trim() ?: "",
-                    city = binding.companyCity.editText!!.text.toString().trim(),
-                    state = binding.companyState.editText!!.text.toString().trim(),
-                    country = binding.companyCountry.editText!!.text.toString().trim(),
-                    type = binding.industryLists.selectedItem.toString().trim()
-                )
+            else if (verifyInputs()) {
+                val company = getCompanyInput()
                 binding.addCompanyProgressBar.visibility = View.VISIBLE
                 binding.outerLayout.isEnabled = false
                 viewModel.insertDataInDB(
@@ -131,6 +139,23 @@ class AddCompaniesFragment : Fragment() {
                 )
             }
         }
+    }
+
+    /**
+     * Function to get Company Inputs
+     */
+    private fun getCompanyInput() : Company{
+        return Company(
+            id = viewModel.companyID.value ?: 0,
+            name = binding.companyName.editText!!.text.toString().trim(),
+            website = binding.companyWebsite.editText!!.text.toString().trim(),
+            number = binding.companyPhoneNumber.editText!!.text.toString().trim(),
+            address = binding.companyAddress.editText?.text.toString().trim(),
+            city = binding.companyCity.editText!!.text.toString().trim(),
+            state = binding.companyState.editText!!.text.toString().trim(),
+            country = binding.companyCountry.editText!!.text.toString().trim(),
+            type = binding.industryLists.selectedItem.toString().trim()
+        )
     }
 
     /**
@@ -213,6 +238,9 @@ class AddCompaniesFragment : Fragment() {
         return isValid
     }
 
+    /**
+     * Function to set the Drop down for the industry types.
+     */
     private fun dropDownAdapter() {
         val items = listOf("Select your Industry Type", "Account", "IT", "Sales", "Health Care")
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.list_item, items)

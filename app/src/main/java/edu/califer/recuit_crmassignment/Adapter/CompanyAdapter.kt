@@ -52,6 +52,7 @@ class CompanyAdapter(var companyList: List<CompanyEntity>, var companyListener: 
 
         companyListener.onItemEdit(
             Company(
+                id = companyList.id,
                 name = companyList.companyName,
                 website = companyList.companyWebsite,
                 number = companyList.companyPhoneNumber,
@@ -72,6 +73,7 @@ class CompanyAdapter(var companyList: List<CompanyEntity>, var companyListener: 
 
         companyListener.onItemDelete(
             Company(
+                id = companyList.id,
                 name = companyList.companyName,
                 website = companyList.companyWebsite,
                 number = companyList.companyPhoneNumber,
@@ -82,14 +84,6 @@ class CompanyAdapter(var companyList: List<CompanyEntity>, var companyListener: 
                 type = companyList.companyType
             )
         )
-    }
-
-    /**
-     * Function to update the list of the companies
-     */
-    fun updateCompanyList(companyList: List<CompanyEntity>) {
-        this.companyList = companyList
-        notifyDataSetChanged()
     }
 
     interface CompanyListener {

@@ -1,6 +1,7 @@
 package edu.califer.recuit_crmassignment.Utils
 
 data class Company(
+    var id : Int,
     var name: String,
     var website: String,
     var number : String,

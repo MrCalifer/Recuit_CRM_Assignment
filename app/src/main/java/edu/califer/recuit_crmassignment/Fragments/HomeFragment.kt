@@ -17,6 +17,7 @@ import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.Utils.Company
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.ViewModels.CompanyViewModel
+import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import edu.califer.recuit_crmassignment.databinding.FragmentHomeBinding
 import pl.kitek.rvswipetodelete.SwipeToEditCallback
 
@@ -62,13 +63,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_addCompaniesFragment)
         }
 
-//        viewModel.isDelete.observe(requireActivity()){
-//            if (it && viewModel.company.value != null){
-//                viewModel.deleteCompanyInDB(viewModel.company.value!!.website)
-//            }
-//        }
-
-        viewModel.isCompanyDeleted.observe(viewLifecycleOwner) {
+        viewModel.refreshCompanyList.observe(viewLifecycleOwner) {
             if (it) {
                 viewModel.getCompaniesList()
             }
@@ -106,6 +101,7 @@ class HomeFragment : Fragment() {
                     adapter = CompanyAdapter(it, object : CompanyAdapter.CompanyListener {
                         override fun onItemEdit(company: Company): Company {
                             viewModel.company.value = Company(
+                                id = company.id,
                                 name = company.name,
                                 website = company.website,
                                 number = company.number,
@@ -115,6 +111,7 @@ class HomeFragment : Fragment() {
                                 country = company.country,
                                 type = company.type
                             )
+                            viewModel.companyID.value = company.id
                             viewModel.isEdit.value = true
                             findNavController().navigate(R.id.action_homeFragment_to_addCompaniesFragment)
                             return super.onItemEdit(company)
@@ -122,6 +119,7 @@ class HomeFragment : Fragment() {
 
                         override fun onItemDelete(company: Company): Company {
                             viewModel.company.value = Company(
+                                id = company.id,
                                 name = company.name,
                                 website = company.website,
                                 number = company.number,
@@ -131,12 +129,26 @@ class HomeFragment : Fragment() {
                                 country = company.country,
                                 type = company.type
                             )
-                            viewModel.deleteCompanyInDB(viewModel.company.value!!.website)
+                            viewModel.deleteCompInDB(
+                                CompanyEntity(
+                                    id = company.id,
+                                    companyName = company.name,
+                                    companyWebsite = company.website,
+                                    companyPhoneNumber = company.number,
+                                    companyAddress = company.address,
+                                    companyCity = company.city,
+                                    companyState = company.state,
+                                    companyCountry = company.country,
+                                    companyType = company.type
+                                )
+                            )
+//                            viewModel.deleteCompanyInDB(viewModel.company.value!!.website)
+
                             return super.onItemDelete(company)
                         }
                     })
                 }
-            }else if(it.isEmpty()){
+            } else if (it.isEmpty()) {
                 binding.companyRecyclerView.visibility = View.GONE
                 binding.noElement.visibility = View.VISIBLE
             }
