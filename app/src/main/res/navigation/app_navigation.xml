@@ -57,6 +57,14 @@
             app:popEnterAnim="@anim/closed_enter"
             app:popExitAnim="@anim/close_exit"
             app:popUpTo="@id/homeFragment"/>
+        <action
+            android:id="@+id/action_homeFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/close_exit"
+            app:popEnterAnim="@anim/closed_enter"
+            app:popExitAnim="@anim/close_exit"
+            app:popUpTo="@id/app_navigation"/>
     </fragment>
     <fragment
         android:id="@+id/addCompaniesFragment"

@@ -60,6 +60,11 @@ class HomeFragment : Fragment() {
 
         viewModel.getCompaniesList()
 
+        binding.logout.setOnClickListener {
+            HelperClass.logout(requireContext())
+            findNavController().navigate(R.id.action_homeFragment_to_signInFragment)
+        }
+
         binding.addButton.setOnClickListener {
             viewModel.isEdit.value = false
             viewModel.isDelete.value = false

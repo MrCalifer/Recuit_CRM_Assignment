@@ -34,8 +34,8 @@ class HelperClass {
          */
         @JvmStatic
         fun isManualShowed(context: Context): Boolean {
-            val prefs = context.getSharedPreferences("LOGIN_DATA", Context.MODE_PRIVATE)
-            return prefs.getBoolean("Manual", false)
+            val editor = context.getSharedPreferences("LOGIN_DATA", Context.MODE_PRIVATE)
+            return editor.getBoolean("Manual", false)
         }
 
         /**
@@ -45,6 +45,14 @@ class HelperClass {
             val editor = context.getSharedPreferences("LOGIN_DATA", Context.MODE_PRIVATE).edit()
             editor.putBoolean("Manual", data)
             editor.apply()
+        }
+
+        /**
+         * Function to logout user.
+         */
+        fun logout(context: Context?) {
+            val editor = context!!.getSharedPreferences("LOGIN_DATA", Context.MODE_PRIVATE)
+            editor.edit().clear().apply()
         }
 
     }
