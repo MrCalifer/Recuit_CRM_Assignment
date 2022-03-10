@@ -1,16 +1,27 @@
 package edu.califer.recuit_crmassignment.Adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import edu.califer.recuit_crmassignment.Utils.Company
+import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import edu.califer.recuit_crmassignment.databinding.CompanyRecyclerItemBinding
 
-class CompanyAdapter(var companyList : List<Company>) : RecyclerView.Adapter<CompanyAdapter.ViewHolder>(){
+class CompanyAdapter(var companyList: List<CompanyEntity>) :
+    RecyclerView.Adapter<CompanyAdapter.ViewHolder>() {
 
 
-    class ViewHolder(val binding: CompanyRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
+    class ViewHolder(private val binding: CompanyRecyclerItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
+        fun bind(companyEntity: CompanyEntity) {
+            binding.setCompanyName(companyEntity.companyName)
+            binding.setCompanyPhoneNumber(companyEntity.companyPhoneNumber)
+            binding.setCompanyWebsite(companyEntity.companyWebsite)
+            binding.companyType = companyEntity.companyType
+            binding.companyAddress =
+                companyEntity.companyAddress + "\n" + companyEntity.companyCity + "\n" + companyEntity.companyState + "\n" + companyEntity.companyCountry
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +34,7 @@ class CompanyAdapter(var companyList : List<Company>) : RecyclerView.Adapter<Com
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind(companyList[position])
     }
 
     override fun getItemCount(): Int {

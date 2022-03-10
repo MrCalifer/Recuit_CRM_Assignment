@@ -13,4 +13,12 @@ class DatabaseHelperImpl(private val companyDB: CompanyDB) : DatabaseHelper {
 
     override suspend fun getAllUser(): List<AuthEntity> =
         companyDB.authDao().getAllAuth()
+
+    override suspend fun insertCompany(companyEntity: CompanyEntity) {
+        companyDB.companyDao().insertDao(companyEntity)
+    }
+
+    override suspend fun getAllCompany(): List<CompanyEntity> =
+        companyDB.companyDao().getAllCompanyEntries()
+
 }

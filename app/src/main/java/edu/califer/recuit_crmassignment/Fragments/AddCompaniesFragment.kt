@@ -1,28 +1,41 @@
 package edu.califer.recuit_crmassignment.Fragments
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.os.Looper
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import edu.califer.recuit_crmassignment.R
+import edu.califer.recuit_crmassignment.Utils.Company
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
+import edu.califer.recuit_crmassignment.ViewModels.CompanyViewModel
+import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
 import edu.califer.recuit_crmassignment.databinding.FragmentAddCompaniesBinding
 
 class AddCompaniesFragment : Fragment() {
 
     lateinit var binding: FragmentAddCompaniesBinding
     lateinit var baseViewModel: BaseViewModel
+    lateinit var viewModel: CompanyViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         baseViewModel = activity.run {
             ViewModelProvider(this@AddCompaniesFragment)[BaseViewModel::class.java]
+        }
+        viewModel = activity.run {
+            ViewModelProvider(this@AddCompaniesFragment)[CompanyViewModel::class.java]
         }
     }
 
@@ -32,10 +45,11 @@ class AddCompaniesFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
 
-        binding = DataBindingUtil.inflate(inflater , R.layout.fragment_add_companies, container , false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_add_companies, container, false)
         binding.lifecycleOwner = this
 
-        baseViewModel.statusBarIconColor(1 , requireActivity())
+        baseViewModel.statusBarIconColor(1, requireActivity())
 
         return binding.root
     }
@@ -44,11 +58,124 @@ class AddCompaniesFragment : Fragment() {
         super.onResume()
 
         dropDownAdapter()
+
+        viewModel.companyAdded.observe(viewLifecycleOwner){
+            if (it){
+                requireActivity().onBackPressed()
+                viewModel.companyAdded.value = false
+            }else{
+                binding.addCompanyProgressBar.visibility = View.GONE
+                binding.outerLayout.isEnabled = true
+            }
+        }
+
+        binding.addCompany.setOnClickListener {
+            if (verifyInputs()) {
+                val company = Company(
+                    name = binding.companyName.editText!!.text.toString().trim(),
+                    website = binding.companyWebsite.editText!!.text.toString().trim(),
+                    number = binding.companyPhoneNumber.editText!!.text.toString().trim(),
+                    address = binding.companyAddress.editText?.text.toString()?.trim() ?: "",
+                    city = binding.companyCity.editText!!.text.toString().trim(),
+                    state = binding.companyState.editText!!.text.toString().trim(),
+                    country = binding.companyCountry.editText!!.text.toString().trim(),
+                    type = binding.industryLists.selectedItem.toString().trim()
+                )
+                binding.addCompanyProgressBar.visibility = View.VISIBLE
+                binding.outerLayout.isEnabled = false
+                viewModel.insertDataInDB(
+                    CompanyEntity(
+                        id = 0,
+                        companyName = company.name,
+                        companyWebsite = company.website,
+                        companyPhoneNumber = company.number,
+                        companyAddress = company.address,
+                        companyCity = company.city,
+                        companyState = company.state,
+                        companyCountry = company.country,
+                        companyType = company.type
+                    )
+                )
+            }
+        }
     }
 
-    private fun dropDownAdapter(){
-        val items = listOf("Account", "IT", "Sales", "Health Care")
+    /**
+     * Function to verify each input fields.
+     */
+    private fun verifyInputs(): Boolean {
+        var isValid = false
+        if (binding.companyName.editText?.text.toString().isNotBlank()) {
+            isValid = true
+        } else {
+            binding.companyName.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.companyName.error = "Name cannot be empty!!"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.companyName.error = null
+            }, 2000)
+        }
+        if (binding.companyWebsite.editText?.text.toString().isNotBlank() &&
+            Patterns.WEB_URL.matcher(binding.companyWebsite.editText?.text.toString())
+                .matches()
+        ) {
+            isValid = true
+        } else {
+            binding.companyWebsite.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.companyWebsite.error = "Invalid web address!!"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.companyWebsite.error = null
+            }, 2000)
+        }
+        if (binding.companyPhoneNumber.editText?.text.toString().isNotBlank() &&
+            binding.companyPhoneNumber.editText?.text.toString().trim().length > 9
+        ) {
+            isValid = true
+        } else {
+            binding.companyPhoneNumber.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.companyPhoneNumber.error = "Invalid Number!. Number should be of 10 digits"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.companyPhoneNumber.error = null
+            }, 2000)
+        }
+        if (binding.companyCity.editText?.text.toString().isNotBlank()) {
+            isValid = true
+        } else {
+            binding.companyCity.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.companyCity.error = "Cannot be empty!!"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.companyCity.error = null
+            }, 2000)
+        }
+        if (binding.companyState.editText?.text.toString().isNotBlank()) {
+            isValid = true
+        } else {
+            binding.companyState.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.companyState.error = "Cannot be empty!!"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.companyState.error = null
+            }, 2000)
+        }
+        if (binding.companyCountry.editText?.text.toString().isNotBlank()) {
+            isValid = true
+        } else {
+            binding.companyCountry.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+            binding.companyCountry.error = "Cannot be empty!!"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.companyCountry.error = null
+            }, 2000)
+        }
+        if (binding.industryLists.selectedItem.toString() != "Select your Industry Type") {
+            isValid = true
+        } else {
+            Toast.makeText(requireContext(), "Industry Type must be selected", Toast.LENGTH_SHORT)
+                .show()
+        }
+        return isValid
+    }
+
+    private fun dropDownAdapter() {
+        val items = listOf("Select your Industry Type", "Account", "IT", "Sales", "Health Care")
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
-        binding.industryLists.setAdapter(arrayAdapter)
+        binding.industryLists.adapter = arrayAdapter
     }
 }

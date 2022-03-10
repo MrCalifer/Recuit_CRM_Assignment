@@ -10,6 +10,7 @@
         tools:context=".Fragments.AddCompaniesFragment">
         
         <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/outer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="5dp"
@@ -228,29 +229,27 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/industry_list"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                        <Spinner
+                            android:id="@+id/industry_lists"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
                             android:layout_marginTop="10dp"
+                            android:popupBackground="@color/white"
+                            android:spinnerMode="dropdown"
+                            app:layout_constraintEnd_toEndOf="@id/company_country"
+                            app:layout_constraintStart_toStartOf="@id/company_country"
+                            app:layout_constraintTop_toBottomOf="@id/company_country"/>
+
+                        <ImageView
+                            android:id="@+id/divider2"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
                             android:layout_marginHorizontal="10dp"
-                            android:hint="Industry List"
-                            app:hintTextColor="@color/black"
-                            app:boxBackgroundColor="@color/white"
-                            app:boxStrokeColor="@color/primary"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/company_country">
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintTop_toBottomOf="@id/industry_lists"
+                            app:layout_constraintStart_toStartOf="@id/company_country"
+                            app:layout_constraintEnd_toEndOf="@id/company_country"/>
 
-                            <AutoCompleteTextView
-                                android:id="@+id/industry_lists"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="none"
-                                />
-
-                        </com.google.android.material.textfield.TextInputLayout>
 
                         <Button
                             android:id="@+id/add_company"
@@ -264,9 +263,9 @@
                             android:textColor="#ffff8b"
                             android:textSize="20sp"
                             android:visibility="visible"
-                            app:layout_constraintEnd_toEndOf="@id/industry_list"
-                            app:layout_constraintStart_toStartOf="@id/industry_list"
-                            app:layout_constraintTop_toBottomOf="@id/industry_list" />
+                            app:layout_constraintEnd_toEndOf="@id/divider2"
+                            app:layout_constraintStart_toStartOf="@id/divider2"
+                            app:layout_constraintTop_toBottomOf="@id/divider2" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -275,6 +274,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <ProgressBar
+            android:id="@+id/add_company_progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
