@@ -1,6 +1,9 @@
 package edu.califer.recuit_crmassignment.Fragments
 
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +18,7 @@ import com.happyplaces.utils.SwipeToDeleteCallback
 import edu.califer.recuit_crmassignment.Adapter.CompanyAdapter
 import edu.califer.recuit_crmassignment.R
 import edu.califer.recuit_crmassignment.Utils.Company
+import edu.califer.recuit_crmassignment.Utils.HelperClass
 import edu.califer.recuit_crmassignment.ViewModels.BaseViewModel
 import edu.califer.recuit_crmassignment.ViewModels.CompanyViewModel
 import edu.califer.recuit_crmassignment.database.entities.CompanyEntity
@@ -94,6 +98,19 @@ class HomeFragment : Fragment() {
             if (it == null) {
                 viewModel.getCompaniesList()
             } else if (it.isNotEmpty()) {
+                if (it.size == 1) {
+                    if (!HelperClass.isManualShowed(requireContext())) {
+                        val dialog = Dialog(binding.root.context)
+                        dialog.setContentView(R.layout.manual_dialog)
+                        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                        dialog.show()
+                        dialog.setCanceledOnTouchOutside(false)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            dialog.dismiss()
+                        }, 3000)
+                        HelperClass.setManualShowed(requireContext(), true)
+                    }
+                }
                 binding.companyRecyclerView.visibility = View.VISIBLE
                 binding.noElement.visibility = View.GONE
                 binding.companyRecyclerView.apply {

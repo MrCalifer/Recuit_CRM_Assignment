@@ -29,6 +29,24 @@ class HelperClass {
             editor.apply()
         }
 
+        /**
+         * Function to get weather user manual is displayed to user for first time or not.
+         */
+        @JvmStatic
+        fun isManualShowed(context: Context): Boolean {
+            val prefs = context.getSharedPreferences("LOGIN_DATA", Context.MODE_PRIVATE)
+            return prefs.getBoolean("Manual", false)
+        }
+
+        /**
+         * Function to set weather user manual is displayed to user for first time or not.
+         */
+        fun setManualShowed(context: Context, data: Boolean) {
+            val editor = context.getSharedPreferences("LOGIN_DATA", Context.MODE_PRIVATE).edit()
+            editor.putBoolean("Manual", data)
+            editor.apply()
+        }
+
     }
 
 }
