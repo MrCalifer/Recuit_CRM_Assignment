@@ -133,7 +133,7 @@ class SignInFragment : Fragment() {
                         }, 2000)
                     }
                 }
-            } else if (binding.nextButton.text == "Register") {
+            } else if (binding.nextButton.text == "Sign-Up") {
 
                 if (binding.username.editText!!.text.toString().isNotEmpty()
                     && Patterns.EMAIL_ADDRESS.matcher(binding.username.editText?.text.toString())
@@ -255,8 +255,8 @@ class SignInFragment : Fragment() {
         when (isUserRegistered) {
             AuthViewModel.EMAIL_IS_NOT_REGISTERED -> {
                 icon.setImageResource(R.drawable.ic_error)
-                message.text = "User Not Registered.\n Kindly Register."
-                continueButton.text = "Register"
+                message.text = "User Not Registered.\n Kindly Sign-Up."
+                continueButton.text = "Sign-Up"
                 continueButton.visibility = View.VISIBLE
                 binding.password.visibility = View.GONE
                 dialog.show()
@@ -303,13 +303,13 @@ class SignInFragment : Fragment() {
 
         continueButton.setOnClickListener {
             dialog.dismiss()
-            if (continueButton.text == "Register") {
+            if (continueButton.text == "Sign-Up") {
                 binding.gettingStarted.text = "Let's get your account register with us."
                 binding.password.visibility = View.VISIBLE
                 binding.password.editText?.setText("")
                 binding.confirmPassword.editText?.setText("")
                 binding.confirmPassword.visibility = View.VISIBLE
-                binding.nextButton.text = "Register"
+                binding.nextButton.text = "Sign-Up"
 
                 binding.Login.visibility = View.VISIBLE
                 binding.loginText.visibility = View.VISIBLE

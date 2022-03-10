@@ -163,78 +163,81 @@ class AddCompaniesFragment : Fragment() {
      * Function to verify each input fields.
      */
     private fun verifyInputs(): Boolean {
-        var isValid: Boolean
+        val isValid: Boolean
         if (binding.companyName.editText?.text.toString().isNotBlank()) {
-            isValid = true
+            if (binding.companyWebsite.editText?.text.toString().isNotBlank() &&
+                Patterns.WEB_URL.matcher(binding.companyWebsite.editText?.text.toString())
+                    .matches()
+            ) {
+                if (binding.companyPhoneNumber.editText?.text.toString().isNotBlank() &&
+                    binding.companyPhoneNumber.editText?.text.toString().trim().length > 9
+                ) {
+                    if (binding.companyCity.editText?.text.toString().isNotBlank()) {
+                        if (binding.companyState.editText?.text.toString().isNotBlank()) {
+                            if (binding.companyCountry.editText?.text.toString().isNotBlank()) {
+                                if (binding.industryLists.selectedItem.toString() != "Select your Company Type") {
+                                    isValid = true
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Industry Type must be selected",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                    return false
+                                }
+                            } else {
+                                binding.companyCountry.setErrorTextColor(
+                                    ColorStateList.valueOf(
+                                        Color.RED
+                                    )
+                                )
+                                binding.companyCountry.error = "Cannot be empty!!"
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    binding.companyCountry.error = null
+                                }, 2000)
+                                return false
+                            }
+                        } else {
+                            binding.companyState.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                            binding.companyState.error = "Cannot be empty!!"
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                binding.companyState.error = null
+                            }, 2000)
+                            return false
+                        }
+                    } else {
+                        binding.companyCity.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                        binding.companyCity.error = "Cannot be empty!!"
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.companyCity.error = null
+                        }, 2000)
+                        return false
+                    }
+                } else {
+                    binding.companyPhoneNumber.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                    binding.companyPhoneNumber.error =
+                        "Invalid Number!. Number should be of 10 digits"
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.companyPhoneNumber.error = null
+                    }, 2000)
+                    return false
+                }
+            } else {
+                binding.companyWebsite.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                binding.companyWebsite.error = "Invalid web address!!"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.companyWebsite.error = null
+                }, 2000)
+                return false
+            }
         } else {
-            isValid = false
             binding.companyName.setErrorTextColor(ColorStateList.valueOf(Color.RED))
             binding.companyName.error = "Name cannot be empty!!"
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.companyName.error = null
             }, 2000)
-        }
-        if (binding.companyWebsite.editText?.text.toString().isNotBlank() &&
-            Patterns.WEB_URL.matcher(binding.companyWebsite.editText?.text.toString())
-                .matches()
-        ) {
-            isValid = true
-        } else {
-            isValid = false
-            binding.companyWebsite.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-            binding.companyWebsite.error = "Invalid web address!!"
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.companyWebsite.error = null
-            }, 2000)
-        }
-        if (binding.companyPhoneNumber.editText?.text.toString().isNotBlank() &&
-            binding.companyPhoneNumber.editText?.text.toString().trim().length > 9
-        ) {
-            isValid = true
-        } else {
-            isValid = false
-            binding.companyPhoneNumber.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-            binding.companyPhoneNumber.error = "Invalid Number!. Number should be of 10 digits"
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.companyPhoneNumber.error = null
-            }, 2000)
-        }
-        if (binding.companyCity.editText?.text.toString().isNotBlank()) {
-            isValid = true
-        } else {
-            isValid = false
-            binding.companyCity.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-            binding.companyCity.error = "Cannot be empty!!"
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.companyCity.error = null
-            }, 2000)
-        }
-        if (binding.companyState.editText?.text.toString().isNotBlank()) {
-            isValid = true
-        } else {
-            isValid = false
-            binding.companyState.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-            binding.companyState.error = "Cannot be empty!!"
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.companyState.error = null
-            }, 2000)
-        }
-        if (binding.companyCountry.editText?.text.toString().isNotBlank()) {
-            isValid = true
-        } else {
-            isValid = false
-            binding.companyCountry.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-            binding.companyCountry.error = "Cannot be empty!!"
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.companyCountry.error = null
-            }, 2000)
-        }
-        if (binding.industryLists.selectedItem.toString() != "Select your Industry Type") {
-            isValid = true
-        } else {
-            isValid = false
-            Toast.makeText(requireContext(), "Industry Type must be selected", Toast.LENGTH_SHORT)
-                .show()
+            return false
         }
         return isValid
     }
@@ -243,7 +246,7 @@ class AddCompaniesFragment : Fragment() {
      * Function to set the Drop down for the industry types.
      */
     private fun dropDownAdapter() {
-        val items = listOf("Select your Industry Type", "Account", "IT", "Sales", "Health Care")
+        val items = listOf("Select your Company Type", "Account", "IT", "Sales", "Health Care")
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
         binding.industryLists.adapter = arrayAdapter
     }
