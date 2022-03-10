@@ -15,7 +15,7 @@ object DatabaseBuilder {
         return instance!!
     }
 
-    private fun buildDB(context: Context): CompanyDB? {
+    private fun buildDB(context: Context): CompanyDB {
         return Room.databaseBuilder(
             context.applicationContext,
             CompanyDB::class.java,

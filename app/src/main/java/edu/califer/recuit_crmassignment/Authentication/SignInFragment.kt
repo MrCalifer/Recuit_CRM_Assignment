@@ -20,16 +20,24 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import edu.califer.recuit_crmassignment.Utils.HelperClass
 import edu.califer.recuit_crmassignment.R
+import edu.califer.recuit_crmassignment.Utils.HelperClass
 import edu.califer.recuit_crmassignment.ViewModels.AuthViewModel
 import edu.califer.recuit_crmassignment.activity.MainActivity
 import edu.califer.recuit_crmassignment.databinding.FragmentSignInBinding
+import java.util.regex.Pattern
 
 class SignInFragment : Fragment() {
 
     lateinit var binding: FragmentSignInBinding
     lateinit var authViewModel: AuthViewModel
+    private val PASSWORD_PATTERN: Pattern = Pattern.compile(
+        "^" +
+                "(?=.*[@#$%^&+=])" +  // at least 1 special character
+                "(?=\\S+$)" +  // no white spaces
+                ".{6,}" +  // at least 6 characters
+                "$"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,7 +148,7 @@ class SignInFragment : Fragment() {
                         .matches()
                 ) {
                     if (binding.password.editText!!.text.toString().isNotEmpty()
-                        && binding.password.editText!!.text.toString().trim().length > 5
+                        && PASSWORD_PATTERN.matcher(binding.password.editText!!.text.toString().trim()).matches()
                     ) {
                         if (binding.confirmPassword.editText!!.text.toString().isNotEmpty()) {
                             verifyPassword(
@@ -157,7 +165,7 @@ class SignInFragment : Fragment() {
                     } else {
                         binding.password.setErrorTextColor(ColorStateList.valueOf(Color.RED))
                         binding.password.error =
-                            "Invalid Password!! . Password must be of 6 Character."
+                            "Invalid Password!! . Password must be of 6 Character including one special character."
                         Handler(Looper.getMainLooper()).postDelayed({
                             binding.password.error = null
                         }, 2000)
